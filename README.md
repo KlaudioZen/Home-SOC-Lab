@@ -12,14 +12,14 @@ Client: New PC with Ryzen 7 7800X3D, stays on Windows. Used only to remotely man
 Proxmox web UI: reachable at a static internal IP, bookmarked on the client.
 
 
-Planned VMs:
-VM                          Purpose
-elastic-vm	                Elasticsearch + Kibana
-wazuh-vm	                  Wazuh manager
-suricata-vm	                Suricata IDS, positioned to see Kali <-> victim traffic
-kali-vm	                    Attacker box
-Windows VM	                Victim, with Sysmon for log generation
-Metasploitable2 / DVWA	    Deliberately vulnerable victim
+### Planned VMs
+
+- `elastic-vm`: Elasticsearch + Kibana
+- `wazuh-vm`: Wazuh manager
+- `suricata-vm`: Suricata IDS, positioned to see Kali <-> victim traffic
+- `kali-vm`: attacker box
+- Windows VM: victim, with Sysmon for log generation
+- Metasploitable2 / DVWA: deliberately vulnerable victim
 
 Repo structure:
 docs/
