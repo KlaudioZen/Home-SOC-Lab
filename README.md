@@ -21,15 +21,14 @@ Proxmox web UI: reachable at a static internal IP, bookmarked on the client.
 - Windows VM: victim, with Sysmon for log generation
 - Metasploitable2 / DVWA: deliberately vulnerable victim
 
-Repo structure:
+
+## Repo structure
+```
 docs/
   progress-log.md         # chronological build log
   troubleshooting-log.md  # problems hit and how they were diagnosed/fixed
 attacks/                  # one folder per attack scenario (added as the lab matures)
-
-
-Status:
-Actively in progress. See docs/progress-log.md for current status and docs/troubleshooting-log.md for issues encountered along the way.
+```
 
 
 Why manual builds instead of Security Onion:
