@@ -43,3 +43,19 @@ Takeaway: 192.168.x.x is private, 198.x.x.x is public.
 Symptom: pastes came through as $'\E[200~cat...' with a trailing ~.
 Cause: noVNC passes bracketed-paste markers through literally.
 Fix: use SSH instead. For the console: `bind 'set enable-bracketed-paste off'`.
+
+Issue: apt update failed to resolve every hostname (after the repo switch)
+Symptom: After switching to the no-subscription repo, `apt update` returned "Temporary failure resolving" for every source, including Debian's own mirrors.
+Diagnosis: Not the repo edits. A repo mistake would only break one source, not all of them. `/etc/resolv.conf` held a single IPv6-only nameserver, left over from the original IPv6-only `vmbr0` setup. Once the host moved to static IPv4, nothing supplied an IPv4 DNS server, so every lookup went to a resolver the host could not reach. This is a separate event from the earlier vmbr0 IPv4 routing fix, but the same root cause.
+Fix:
+
+1. Set DNS in the web UI (Datacenter -> pve -> System -> DNS): DNS server 1 = `192.168.12.1` (router), DNS server 2 = `1.1.1.1`. Setting it here (not by hand-editing resolv.conf) means it survives reboots.
+2. First attempt had a transposed-digit typo, `198.162.12.1`, which is a public address, not the router. It appeared to work by failing over to `1.1.1.1`, slowly and with no local name resolution. Corrected to `192.168.12.1`.
+
+Lesson: `192.168.x.x` is private (RFC 1918), `198.x.x.x` is public. When DNS fails but routing is fine, check the nameserver in resolv.conf itself, not just connectivity. Third problem traced back to the original IPv6-only vmbr0 config.
+
+Issue: Pasting into the Proxmox web console inserted garbage
+Symptom: Pasted commands arrived as `$'\E[200~cat...'` with a trailing `~`, breaking every command.
+Diagnosis: The noVNC web console passes bracketed-paste markers through as literal text.
+Fix: Do host and VM work over SSH from the gaming PC (`ssh root@192.168.12.5`), where paste works normally. Inside the console itself, `bind 'set enable-bracketed-paste off'` disables it for that shell.
+Lesson: Use SSH for real work, keep the web console as the out-of-band recovery path for when the network or SSH is broken.
