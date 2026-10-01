@@ -30,17 +30,7 @@
 - Cloned locally to the gaming PC, configured SSH authentication instead of HTTPS
 - Confirmed full clone → pull → commit → push loop works
 
-## Not yet done
-
-- Switch Proxmox repo from "enterprise" to "no-subscription" so `apt update` works without a paid subscription
-- Decide RAM/core allocation across `elastic-vm`, `wazuh-vm`, and `suricata-vm`
-- Build `elastic-vm` (Elasticsearch + Kibana), `wazuh-vm` (Wazuh manager), `suricata-vm` (Suricata) off the downloaded ISO
-- Install Elastic, Wazuh, and Suricata manually inside their respective VMs (decided against Security Onion, want the manual build for interview talking points)
-- Build out `kali-vm` (attacker box), Windows VM with Sysmon (victim, log generation), Metasploitable2 or DVWA (deliberately vulnerable victim)
-- Later/lower priority: general homelab extras (Pi-hole, WireGuard/Tailscale, etc.)
-
 ## Immediate next step
-
 Switch the Proxmox repo to no-subscription, then start building `elastic-vm`.
 
 
@@ -79,3 +69,15 @@ pve-manager now 9.2.20, pveproxy active.
 Storage: local-lvm thin pool ~794 GB free. Thin provisioning means a 20 GB VM
 disk only uses what's written. A thin pool at 100% corrupts guests, so watch it
 with `pvesm status`.
+
+
+Not yet done
+
+* Decide RAM/core allocation across `elastic-vm`, `wazuh-vm`, and `suricata-vm`
+* Build `elastic-vm` (Elasticsearch + Kibana), `wazuh-vm` (Wazuh manager), `suricata-vm` (Suricata) off the downloaded ISO
+* Install Elastic, Wazuh, and Suricata manually inside their respective VMs (decided against Security Onion, want the manual build for interview talking points)
+* Build out `kali-vm` (attacker box), Windows VM with Sysmon (victim, log generation), Metasploitable2 or DVWA (deliberately vulnerable victim)
+* Later/lower priority: general homelab extras (Pi-hole, WireGuard/Tailscale, etc.)
+
+Immediate next step
+Decide RAM/core allocation, then start building `elastic-vm`.
