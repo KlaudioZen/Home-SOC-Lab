@@ -24,3 +24,22 @@
 **Conclusion:** IPv4 connectivity was never actually broken after the `vmbr0` fix. That specific Canonical server (or a hop along the route to it) simply doesn't respond to ICMP (ping), which is common practice for servers/CDNs and unrelated to whether the real connection works. The ping test gave a false negative.
 
 **Lesson:** When ping disagrees with other evidence, don't trust it alone — confirm with the actual protocol you care about. Isolating "is my network broken" from "is this one destination just not responding to this one protocol" via layered testing (nearest hop → known-good external target → actual protocol) is a repeatable diagnostic pattern, not a one-off fix.
+
+## 2026-09-20 - apt update fails to resolve every hostname
+
+Symptom: apt update returned "Temporary failure resolving" for every repo,
+including Debian's own.
+Cause: /etc/resolv.conf had a single IPv6-only nameserver, left over from the
+original IPv6-only vmbr0 config. After switching to static IPv4, nothing supplied
+an IPv4 DNS server. Third problem traced to that same vmbr0 config.
+Fix: Datacenter -> pve -> System -> DNS, DNS 1 = 192.168.12.1, DNS 2 = 1.1.1.1.
+Set in the web UI so it survives reboots.
+Follow-up: first try had 198.162.12.1 (transposed digits, a public address). It
+worked by failing over to 1.1.1.1, slowly. Corrected to 192.168.12.1.
+Takeaway: 192.168.x.x is private, 198.x.x.x is public.
+
+## 2026-09-20 - Console paste inserts garbage
+
+Symptom: pastes came through as $'\E[200~cat...' with a trailing ~.
+Cause: noVNC passes bracketed-paste markers through literally.
+Fix: use SSH instead. For the console: `bind 'set enable-bracketed-paste off'`.
