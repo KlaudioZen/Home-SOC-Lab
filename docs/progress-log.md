@@ -43,6 +43,22 @@
 
 Switch the Proxmox repo to no-subscription, then start building `elastic-vm`.
 
+September 2026
+Switched to the no-subscription repo
+* Confirmed PVE 9.2.2 on Debian 13 trixie (`pveversion`); this version uses the deb822 `.sources` repo format, not the old one-line `.list` format
+* Disabled the paid repos by setting `Enabled: false` on `pve-enterprise.sources` and `ceph.sources`
+* Added `pve-no-subscription.sources` pointing at `download.proxmox.com`, with `Signed-By` set to the confirmed keyring path
+* `apt update` then failed on every hostname; root cause turned out to be DNS, not the repo edits (full details in `troubleshooting-log.md`)
+* After the DNS fix, `apt update` pulled from `pve-no-subscription` cleanly, confirming the repo switch worked
+
+Host upgrade
+* Ran `apt full-upgrade`: 182 packages plus a new kernel
+* Rebooted into kernel `7.0.14-17-pve`; `pve-manager` now `9.2.20`, `pveproxy` confirmed active
+
+Storage check
+* `local-lvm` thin pool has ~794 GB free
+* Thin provisioning means a VM disk only consumes what's actually written, so snapshots and clones are cheap. A thin pool that reaches 100% corrupts guests, so watch it with `pvesm status`
+
 ## 2026-09-20 - Switched host off the enterprise repo, fixed DNS, upgraded
 
 Switched from the noVNC console to SSH (`ssh root@192.168.12.5`) because the
