@@ -43,8 +43,8 @@
 
 Switch the Proxmox repo to no-subscription, then start building `elastic-vm`.
 
-September 2026
-Switched to the no-subscription repo
+
+## 2026-09-15 - Switched to the no-subscription repo
 * Confirmed PVE 9.2.2 on Debian 13 trixie (`pveversion`); this version uses the deb822 `.sources` repo format, not the old one-line `.list` format
 * Disabled the paid repos by setting `Enabled: false` on `pve-enterprise.sources` and `ceph.sources`
 * Added `pve-no-subscription.sources` pointing at `download.proxmox.com`, with `Signed-By` set to the confirmed keyring path
